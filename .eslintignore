@@ -1,0 +1,27 @@
+# /node_modules/* and /bower_components/* in the project root are ignored by default
+
+*.sh
+*.md
+*.woff
+*.ttf
+.vscode
+.idea
+dist
+/public
+/docs
+/bin
+/src/mock/*
+.husky
+.local
+
+# prettier
+prettier.config.js
+
+# eslintrc
+.eslintrc.js
+
+# ts与eslint对文件的匹配机制不一样，tsconfig不会把vite.config.ts纳入检查范围，而eslint会，因此会解析出错，忽略掉是最简单的解决方案
+vite.config.ts
+
+# @typescript-eslint/parser需要获得该文件配置，因此这里是否忽略无意义
+# tsconfig.json
