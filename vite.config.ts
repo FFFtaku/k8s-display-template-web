@@ -5,7 +5,9 @@ import vue from '@vitejs/plugin-vue'
 // eslint接入
 import eslint from 'vite-plugin-eslint'
 
-// element ui按需引入
+// element ui反馈组件样式自动引入
+import ElementPlus from 'unplugin-element-plus/vite'
+// element ui自动按需引入
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
@@ -26,6 +28,7 @@ export default defineConfig({
     //   })
     // },
     // element ui按需引入
+    ElementPlus({}),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
@@ -56,5 +59,8 @@ export default defineConfig({
         additionalData: '@import "@assets/style/variable.scss";'
       }
     }
+  },
+  server:{
+    open: true
   }
 })

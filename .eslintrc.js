@@ -29,5 +29,11 @@ module.exports = {
     'quotes': [2, 'single'],
     // 除了_、x、e、i、j、k外不能使用小于三位长度的变量名
     'id-length': ['error', { 'exceptions': ['x', '_', 'e', 'i', 'j', 'k'], 'min': 3 }]
+  },
+  globals: {
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
   }
 }

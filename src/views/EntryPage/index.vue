@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import type { FormInstance } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { postLogin } from '@api/apiLogin'
+import type { FormInstance, FormRules } from 'element-plus'
 
-const formLabelAlign = reactive({
+const router = useRouter()
+const formRef = ref<FormInstance>()
+const loginData = reactive({
   name: '',
-  region: '',
-  type: '',
+  password: ''
 })
 
 const handleBasicLogin = (formEl: FormInstance | undefined) => {
@@ -13,10 +16,46 @@ const handleBasicLogin = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
+      isLoginConfirmDialogShow.value = true
+      // postLogin({
+      //   Username: loginData.name,
+      //   Password: loginData.password
+      // }).then(res => {
+      //   console.log(res)
+      // })
     } else {
       console.log('error submit!')
       return false
     }
+  })
+}
+
+const checkName = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    return callback(new Error('请输入用户名'))
+  }
+  callback()
+}
+const checkPassword = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    return callback(new Error('请设置密码'))
+  }
+  callback()
+}
+const rules = reactive<FormRules>({
+  name: [{ validator: checkName, trigger: 'blur' }],
+  password: [{ validator: checkPassword, trigger: 'blur' }]
+})
+
+const isLoginConfirmDialogShow = ref(false)
+const userInfo = reactive({
+  name: 'push001',
+  role: 'Admin'
+})
+const handleAccess = () => {
+  isLoginConfirmDialogShow.value = false
+  router.push({
+    name: 'account'
   })
 }
 </script>
@@ -39,15 +78,16 @@ const handleBasicLogin = (formEl: FormInstance | undefined) => {
           <div class="operation-tag">
             登录
           </div>
-          <el-form :label-position="'top'" label-width="100px" :model="formLabelAlign" style="max-width: 460px">
-            <el-form-item label="您的账户（email/）">
-              <el-input v-model="formLabelAlign.name" />
+          <el-form :label-position="'top'" label-width="100px" :rules="rules" :model="loginData" ref="formRef"
+            style="max-width: 460px">
+            <el-form-item label="您的账户（email/）" prop="name">
+              <el-input v-model="loginData.name" />
             </el-form-item>
-            <el-form-item label="密码">
-              <el-input v-model="formLabelAlign.region" />
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="loginData.password" />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="handleBasicLogin">登录</el-button>
+              <el-button type="primary" @click="handleBasicLogin(formRef)">登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -55,6 +95,24 @@ const handleBasicLogin = (formEl: FormInstance | undefined) => {
       <div class="bg-display"></div>
     </div>
 
+    <el-dialog v-model="isLoginConfirmDialogShow" title="确认您登录的账户" width="35%">
+      <el-form-item label="账户：">
+        <el-input v-model="userInfo.name" :disabled="true" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="权限：">
+        <el-input v-model="userInfo.role" :disabled="true" autocomplete="off" />
+      </el-form-item>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="isLoginConfirmDialogShow = false">取消</el-button>
+          <el-button type="primary" @click="handleAccess">
+            进入系统
+          </el-button>
+        </span>
+      </template>
+
+    </el-dialog>
   </div>
 </template>
 

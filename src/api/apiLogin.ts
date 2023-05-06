@@ -1,10 +1,20 @@
 import http from './request/http'
 
-function postLogin() {
-  return http.post('/login')
+interface PostLogin {
+  Username: string,
+  Password: string
+}
+function postLogin(argu: PostLogin) {
+  return http.post('/login', argu)
 }
 
-function postRegister(argu: object) {
+interface PostRegister {
+  Username: string,
+  Password: string,
+  Role: string,
+  Path: string
+}
+function postRegister(argu: PostRegister) {
   return http.post('/register', argu)
 }
 
